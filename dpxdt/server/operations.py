@@ -48,7 +48,7 @@ def _get_versioned_hash_key(key):
             logging.error(
                 'Fetching cached version for %r returned None, using %d',
                 versioned_key, version)
-    return '%s:%d' % (key, int(version))
+    return '{}:{}'.format(key, version)
 
 
 class BaseOps(object):
