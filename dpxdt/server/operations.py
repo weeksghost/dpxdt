@@ -40,15 +40,22 @@ def _clear_version_cache(key):
 
 
 def _get_versioned_hash_key(key):
-    versioned_key = '%s_version' % key
-    version = int(time.time())
-    if not cache.add(versioned_key, version):
-        version = cache.get(versioned_key)
-        if version is None:
-            logging.error(
-                'Fetching cached version for %r returned None, using %d',
-                versioned_key, version)
-    return '%s:%d' % (key, version)
+    try:
+        versioned_key = '%s_version' % key
+        version = int(time.time())
+        if not cache.add(versioned_key, version):
+            version = cache.get(versioned_key)
+            if version is None:
+                logging.error(
+                    'Fetching cached version for %r returned None, using %d',
+                    versioned_key, version)
+        return '%s:%d' % (key, version)
+    except:
+        # Logging error then manually setting version
+        logging.error(
+            'TypeError: %d format: a number is required, not NoneType')
+        version = 1
+        return '%s:%d' % (key, version)
 
 
 class BaseOps(object):
